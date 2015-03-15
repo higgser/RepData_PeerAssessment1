@@ -188,23 +188,18 @@ dataWeekdays <- transform(dataFilled,
                                      labels=c("weekend","weekday")))
 ```
 
-Finally we make a time series plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
+Finally we make a time series plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). On weekdays, the activity pattern is considerably different from the weekends, where people do not have to walk to work.
 
 ```r
 stepsWeekend <- aggregate(steps ~ interval+day, dataWeekdays, mean)
 stepsWeekend <- transform(stepsWeekend, time = intervalToTime(interval))
+par("mfrow"=c(2,1))
 with(stepsWeekend[stepsWeekend$day=="weekend",],
      plot(time, steps, type="l", main="Average number of steps on weekend",
-          xlab="5-min interval", ylab="Average number of steps"))
+          xlab="5-min interval", ylab="Number of steps"))
+with(stepsWeekend[stepsWeekend$day!="weekend",],
+     plot(time, steps, type="l", main="on weekdays",
+          xlab="5-min interval", ylab="Number of steps"))
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-15-1.png) 
-
-```r
-with(stepsWeekend[stepsWeekend$day!="weekend",],
-     plot(time, steps, type="l", main="Average number of steps on weekdays",
-          xlab="5-min interval", ylab="Average number of steps"))
-```
-
-![](PA1_template_files/figure-html/unnamed-chunk-15-2.png) 
-On weekdays, the activity pattern is considerably different from the weekends, where people do not have to go to work.
