@@ -42,7 +42,8 @@ For the first part of the analysis we ignore missing values. Here's a histogram 
 ```{r}
 dataNoNa <- subset(data, complete.cases(data))
 stepsPerDay <- aggregate(steps ~ date, dataNoNa, sum)
-hist(stepsPerDay$steps, main="Histogram of total number of steps per day", xlab="Number of steps per day", col="skyblue")
+hist(stepsPerDay$steps, main="Histogram of total number of steps per day",
+     xlab="Number of steps per day", col="skyblue")
 ```
 
 The mean and median total number of steps taken per day are very close together.
@@ -56,7 +57,9 @@ The following plot shows the average number of steps that are taken in every 5-m
 ```{r}
 stepsPerInterval <- aggregate(steps ~ interval, dataNoNa, mean)
 stepsPerInterval <- transform(stepsPerInterval, time = intervalToTime(interval))
-with(stepsPerInterval, plot(time, steps, type="l", main="Average number of steps", xlab="5-min interval", ylab="Average number of steps"))
+with(stepsPerInterval,
+     plot(time, steps, type="l", main="Average number of steps",
+          xlab="5-min interval", ylab="Average number of steps"))
 ```
 
 In average most steps are taken in the morning at 8:35.
@@ -104,7 +107,9 @@ dataFilled <- rbind(dataNoNa, dataNaFilled)
 Now we can compare the histogram of the total number of steps per day with the previous results that contained missing values.
 ```{r}
 stepsPerDayFilled <- aggregate(steps ~ date, dataFilled, sum)
-hist(stepsPerDayFilled$steps, col="skyblue", main="Histogram of the total number of steps per day", xlab="Number of steps per day")
+hist(stepsPerDayFilled$steps, col="skyblue",
+     main="Histogram of the total number of steps per day",
+     xlab="Number of steps per day")
 hist(stepsPerDay$steps, col=scales::alpha("red",0.4), add = TRUE)
 legend(30, c("Without NA's", "With NA's"), fill=c("skyblue", scales::alpha("red",0.4)))
 ```
@@ -123,14 +128,20 @@ In the last section we analyse the difference between weekdays and weekends in t
 ```{r}
 Sys.setlocale("LC_TIME", "English")
 isWeekend <- function(date) { weekdays(date) %in% c("Saturday", "Sunday")}
-dataWeekdays <- transform(dataFilled, day=factor(isWeekend(date),levels=c(T,F),labels=c("weekend","weekday")))
+dataWeekdays <- transform(dataFilled,
+                          day=factor(isWeekend(date),levels=c(T,F),
+                                     labels=c("weekend","weekday")))
 ```
 
 Finally we make a time series plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 ```{r}
 stepsWeekend <- aggregate(steps ~ interval+day, dataWeekdays, mean)
 stepsWeekend <- transform(stepsWeekend, time = intervalToTime(interval))
-with(stepsWeekend[stepsWeekend$day=="weekend",], plot(time, steps, type="l", main="Average number of steps on weekend", xlab="5-min interval", ylab="Average number of steps"))
-with(stepsWeekend[stepsWeekend$day!="weekend",], plot(time, steps, type="l", main="Average number of steps on weekdays", xlab="5-min interval", ylab="Average number of steps"))
+with(stepsWeekend[stepsWeekend$day=="weekend",],
+     plot(time, steps, type="l", main="Average number of steps on weekend",
+          xlab="5-min interval", ylab="Average number of steps"))
+with(stepsWeekend[stepsWeekend$day!="weekend",],
+     plot(time, steps, type="l", main="Average number of steps on weekdays",
+          xlab="5-min interval", ylab="Average number of steps"))
 ```
 On weekdays, the activity pattern is considerably different from the weekends, where people do not have to go to work.
