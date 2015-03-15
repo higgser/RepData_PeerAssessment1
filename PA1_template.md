@@ -42,7 +42,7 @@ For the first part of the analysis we ignore missing values. Here's a histogram 
 dataNoNa <- subset(data, complete.cases(data))
 stepsPerDay <- aggregate(steps ~ date, dataNoNa, sum)
 hist(stepsPerDay$steps, main="Histogram of total number of steps per day",
-     xlab="Number of steps per day", col="skyblue")
+     xlab="Number of steps per day", col=scales::alpha("red",0.4))
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
